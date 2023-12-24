@@ -1,5 +1,6 @@
 ﻿using KfcApi.Models.AbstractModelClasses;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KfcApi.Models
 {
@@ -13,5 +14,7 @@ namespace KfcApi.Models
         public string? MenuAddOns { get; set; }
 
         public Product? Product { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
     }
 }
