@@ -5,14 +5,40 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace KfcApi.Migrations.ApplicationAuthDb
+namespace KfcApi.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstAuthMigration : Migration
+    public partial class OneDbContext : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<string>(
+                name: "UserId",
+                table: "OrderUsers",
+                type: "nvarchar(450)",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "UserId",
+                table: "Carts",
+                type: "nvarchar(450)",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "UserId",
+                table: "Addresses",
+                type: "nvarchar(450)",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -32,6 +58,10 @@ namespace KfcApi.Migrations.ApplicationAuthDb
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -168,6 +198,21 @@ namespace KfcApi.Migrations.ApplicationAuthDb
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderUsers_UserId",
+                table: "OrderUsers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_UserId",
+                table: "Carts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_UserId",
+                table: "Addresses",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -205,11 +250,47 @@ namespace KfcApi.Migrations.ApplicationAuthDb
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Addresses_AspNetUsers_UserId",
+                table: "Addresses",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Carts_AspNetUsers_UserId",
+                table: "Carts",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_OrderUsers_AspNetUsers_UserId",
+                table: "OrderUsers",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Addresses_AspNetUsers_UserId",
+                table: "Addresses");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Carts_AspNetUsers_UserId",
+                table: "Carts");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_OrderUsers_AspNetUsers_UserId",
+                table: "OrderUsers");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -230,6 +311,42 @@ namespace KfcApi.Migrations.ApplicationAuthDb
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropIndex(
+                name: "IX_OrderUsers_UserId",
+                table: "OrderUsers");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Carts_UserId",
+                table: "Carts");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Addresses_UserId",
+                table: "Addresses");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "UserId",
+                table: "OrderUsers",
+                type: "nvarchar(max)",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(450)");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "UserId",
+                table: "Carts",
+                type: "nvarchar(max)",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(450)");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "UserId",
+                table: "Addresses",
+                type: "nvarchar(max)",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(450)");
         }
     }
 }

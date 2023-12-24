@@ -1,4 +1,5 @@
 ﻿using KfcApi.Models.AbstractModelClasses;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KfcApi.Models
 {
@@ -11,6 +12,8 @@ namespace KfcApi.Models
         public string Type { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
 
 
     }
