@@ -1,6 +1,7 @@
 ﻿using KfcApi.DTOs;
 using KfcApi.Models;
 using KfcApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -93,6 +94,7 @@ namespace KfcApi.Controllers
 
         [HttpGet]
         [Route("{email}")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetUserByEmail(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -118,6 +120,7 @@ namespace KfcApi.Controllers
 
         [HttpPut]
         [Route("{userId}")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdateUser([FromRoute] string userId, [FromForm] UpdateUserRequestDto updateUserRequestDto)
         {
             var user = await _userManager.FindByIdAsync(userId);

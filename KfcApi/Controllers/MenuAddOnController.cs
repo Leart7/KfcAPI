@@ -3,6 +3,7 @@ using KfcApi.CustomActionFilters;
 using KfcApi.DTOs;
 using KfcApi.Models;
 using KfcApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace KfcApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin, User")]
     public class MenuAddOnController : ControllerBase
     {
         private readonly IAddOnRepository<MenuAddOn> _menuAddOnRepository;
@@ -31,6 +33,7 @@ namespace KfcApi.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateMenuAddOn([FromBody] MenuAddOnRequestDto menuAddOnDto)
         {
             var menuAddOnDomainModel = _mapper.Map<MenuAddOn>(menuAddOnDto);
@@ -42,6 +45,7 @@ namespace KfcApi.Controllers
         [HttpPut]
         [Route("{id}")]
         [ValidateModel]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateMenuAddOn([FromRoute] int id, [FromBody] MenuAddOnRequestDto menuAddOnDto)
         {
             var menuAddOnDomainModel = _mapper.Map<MenuAddOn>(menuAddOnDto);
@@ -57,6 +61,7 @@ namespace KfcApi.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteMenuAddOn([FromRoute] int id)
         {
             var menuAddOn = await _menuAddOnRepository.DeleteAddOn(id);
