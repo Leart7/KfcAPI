@@ -3,6 +3,7 @@ using KfcApi.CustomActionFilters;
 using KfcApi.DTOs;
 using KfcApi.Models;
 using KfcApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace KfcApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository<Category> _categoryRepository;
@@ -22,6 +24,7 @@ namespace KfcApi.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCategories()
         {
             var categories = await _categoryRepository.GetAllCategories();

@@ -2,6 +2,7 @@
 using KfcApi.DTOs;
 using KfcApi.Models;
 using KfcApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace KfcApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin, User")]
     public class AddressController : ControllerBase
     {
         private readonly IAddressRepository _addressRepository;
@@ -28,19 +30,8 @@ namespace KfcApi.Controllers
             return Ok(_mapper.Map<List<AddressDto>>(addresses));
         }
 
-        //[HttpGet]
-        //[Route("{id}")]
-        //public async Task<IActionResult> GetAddress([FromRoute] int id)
-        //{
-        //    var address = await _addressRepository.GetAddress(id);
-        //    if(address == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(_mapper.Map<AddressDto>(address));
-        //}
-
         [HttpPost]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> CreateAddress([FromBody] AddressRequestDto addressRequestDto)
         {
             var addressDomainModel = _mapper.Map<Address>(addressRequestDto);
@@ -50,6 +41,7 @@ namespace KfcApi.Controllers
 
         [HttpPut]
         [Route("{id}")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdateAddress([FromRoute] int id, [FromBody] AddressUpdateRequestDto addressRequestDto)
         {
             var addressDomainModel = _mapper.Map<Address>(addressRequestDto);
@@ -64,6 +56,7 @@ namespace KfcApi.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteAddress([FromRoute] int id)
         {
             var address = await _addressRepository.DeleteAddress(id);

@@ -12,6 +12,7 @@ namespace KfcApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "User")]
     public class CartController : ControllerBase
     {
         private readonly ICartRepository _cartRepository;

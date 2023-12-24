@@ -2,6 +2,7 @@
 using KfcApi.DTOs;
 using KfcApi.Models;
 using KfcApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace KfcApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin, User")]
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
@@ -21,6 +23,7 @@ namespace KfcApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> CreateOrder([FromBody] OrderRequestDto orderRequestDto)
         {
             var orderDomainModel = _mapper.Map<Order>(orderRequestDto);

@@ -3,6 +3,7 @@ using KfcApi.CustomActionFilters;
 using KfcApi.DTOs;
 using KfcApi.Models;
 using KfcApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace KfcApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -22,6 +24,7 @@ namespace KfcApi.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetProducts()
         {
             var products = await _productRepository.GetAllProducts();
@@ -31,6 +34,7 @@ namespace KfcApi.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetProduct([FromRoute] int id)
         {
             var product = await _productRepository.GetProduct(id);
